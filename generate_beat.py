@@ -47,7 +47,7 @@ class TransformerBlock(layers.Layer):
         return self.layernorm2(x + ffn)
 
 # =====================================================
-# AI Melody
+# AI Melody Generation
 # =====================================================
 
 def sample_topk(probs, k=25):
@@ -78,7 +78,7 @@ def progression(style):
         return [48, 50, 53, 55]
     elif style == "energetic":
         return [60, 67, 69, 65]
-    else:
+    else:  # lofi
         return [57, 53, 60, 55]
 
 # =====================================================
@@ -90,7 +90,7 @@ def create_piano(token_ids, int_to_note, bpm, duration, style, instrument):
     program = pretty_midi.instrument_name_to_program(instrument)
     inst = pretty_midi.Instrument(program=program)
 
-    bar_len = (60/bpm)*4
+    bar_len = (60 / bpm) * 4
     prog = progression(style)
 
     if style == "lofi":
@@ -115,26 +115,26 @@ def create_piano(token_ids, int_to_note, bpm, duration, style, instrument):
         if t + dur > duration:
             break
 
-        if last_pitch and abs(pitch-last_pitch) > 12:
+        if last_pitch and abs(pitch - last_pitch) > 12:
             pitch = last_pitch + (7 if pitch > last_pitch else -7)
 
         inst.notes.append(pretty_midi.Note(
-            velocity=melody_vel + random.randint(-5,5),
+            velocity=melody_vel + random.randint(-5, 5),
             pitch=pitch,
             start=t,
-            end=t+dur
+            end=t + dur
         ))
 
         bar = int(t // bar_len)
         root = prog[bar % len(prog)]
-        chord = [root, root+4, root+7]
+        chord = [root, root + 4, root + 7]
 
         for c in chord:
             inst.notes.append(pretty_midi.Note(
                 velocity=chord_vel,
                 pitch=c,
-                start=bar*bar_len,
-                end=(bar+1)*bar_len
+                start=bar * bar_len,
+                end=(bar + 1) * bar_len
             ))
 
         t += dur
@@ -143,13 +143,12 @@ def create_piano(token_ids, int_to_note, bpm, duration, style, instrument):
     pm.instruments.append(inst)
     pm.write("outputs/piano.mid")
 
-    # synth directly in python (NO fluidsynth dependency)
     audio = pm.synthesize(fs=44100)
     sf.write("outputs/piano.wav", audio, 44100)
     return audio
 
 # =====================================================
-# Drum Engine (Trapkit WAV based)
+# Drum Engine
 # =====================================================
 
 def load_sample(path):
@@ -158,72 +157,70 @@ def load_sample(path):
         audio = audio.mean(axis=1)
     return audio
 
+
 def place_sample(track, sample, idx):
     end = idx + len(sample)
     if idx >= len(track):
         return
     if end > len(track):
-        sample = sample[:len(track)-idx]
-    track[idx:idx+len(sample)] += sample
+        sample = sample[:len(track) - idx]
+    track[idx:idx + len(sample)] += sample
+
 
 def create_drums(style, bpm, duration, kit_path):
     sr = 44100
-    total = int(duration*sr)
+    total = int(duration * sr)
     mix = np.zeros(total)
 
-    kick = load_sample(os.path.join(kit_path,"kick.wav"))
-    snare_file = "snare.wav" if os.path.exists(os.path.join(kit_path,"snare.wav")) else "clap.wav"
-    snare = load_sample(os.path.join(kit_path,snare_file))
-    hat = load_sample(os.path.join(kit_path,"hat.wav"))
+    kick = load_sample(os.path.join(kit_path, "kick.wav"))
+    snare_file = "snare.wav" if os.path.exists(os.path.join(kit_path, "snare.wav")) else "clap.wav"
+    snare = load_sample(os.path.join(kit_path, snare_file))
+    hat = load_sample(os.path.join(kit_path, "hat.wav"))
 
-    has_808 = os.path.exists(os.path.join(kit_path,"808.wav"))
+    has_808 = os.path.exists(os.path.join(kit_path, "808.wav"))
     if has_808:
-        bass808 = load_sample(os.path.join(kit_path,"808.wav"))
+        bass808 = load_sample(os.path.join(kit_path, "808.wav"))
 
-    step = (60/bpm)/2
-    steps = int(duration/step)
+    step = (60 / bpm) / 2
+    steps = int(duration / step)
 
-    drum_start = int((4*4)/(2))  # 4 bar delay
+    drum_start = int((4 * 4) / 2)  # Start drums after 4 bars
 
     for i in range(steps):
         if i < drum_start:
             continue
 
-        t = i*step
-        idx = int(t*sr)
+        t = i * step
+        idx = int(t * sr)
 
-        # HAPPY dancehall exact
         if style == "happy":
-            if i%8 in [0,4]:
-                place_sample(mix,kick,idx)
-            if i%8 in [3,6]:
-                place_sample(mix,snare,idx)
-
-        elif style in ["romantic","lofi"]:
-            if i%8==0:
-                place_sample(mix,kick,idx)
-            if i%8==4:
-                place_sample(mix,snare,idx)
-
-        elif style=="aggressive":
-            if i%8 in [0,2,5]:
-                place_sample(mix,kick,idx)
-            if i%8==4:
-                place_sample(mix,snare,idx)
-
+            if i % 8 in [0, 4]:
+                place_sample(mix, kick, idx)
+            if i % 8 in [3, 6]:
+                place_sample(mix, snare, idx)
+        elif style in ["romantic", "lofi"]:
+            if i % 8 == 0:
+                place_sample(mix, kick, idx)
+            if i % 8 == 4:
+                place_sample(mix, snare, idx)
+        elif style == "aggressive":
+            if i % 8 in [0, 2, 5]:
+                place_sample(mix, kick, idx)
+            if i % 8 == 4:
+                place_sample(mix, snare, idx)
         else:
-            if i%4==0:
-                place_sample(mix,kick,idx)
-            if i%4==2:
-                place_sample(mix,snare,idx)
+            if i % 4 == 0:
+                place_sample(mix, kick, idx)
+            if i % 4 == 2:
+                place_sample(mix, snare, idx)
 
-        place_sample(mix,hat*0.6,idx)
+        place_sample(mix, hat * 0.6, idx)
 
-        if has_808 and i%8==0:
-            place_sample(mix,bass808*0.8,idx)
+        if has_808 and i % 8 == 0:
+            place_sample(mix, bass808 * 0.8, idx)
 
-    mix = mix/np.max(np.abs(mix))*0.9
-    sf.write("outputs/drums.wav",mix,sr)
+    mix = mix / np.max(np.abs(mix)) * 0.9
+    sf.write("outputs/drums.wav", mix, sr)
     return mix
 
 # =====================================================
@@ -233,12 +230,12 @@ def create_drums(style, bpm, duration, kit_path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--style", default="lofi",
-                        choices=["aggressive","lofi","happy","energetic","romantic"])
+                        choices=["aggressive", "lofi", "happy", "energetic", "romantic"])
     parser.add_argument("--bpm", type=int, default=120)
     parser.add_argument("--duration", type=int, default=60)
     parser.add_argument("--instrument", default="Electric Piano 1")
     parser.add_argument("--kit", default="drum_kits/trapkit")
-    parser.add_argument("--model", default="models/tuneformer_piano.keras")
+    parser.add_argument("--model", default="models/tuneformer_piano.h5")
     parser.add_argument("--vocab", default="data/vocab.pkl")
     parser.add_argument("--xval", default="data/X_val.npy")
 
@@ -247,17 +244,26 @@ def main():
     os.makedirs("outputs", exist_ok=True)
     os.makedirs("static", exist_ok=True)
 
-    with open(args.vocab,"rb") as f:
+    print("Model path:", args.model)
+    print("File exists:", os.path.exists(args.model))
+
+    with open(args.vocab, "rb") as f:
         pitchnames = pickle.load(f)
-    int_to_note = {i:n for i,n in enumerate(pitchnames)}
+    int_to_note = {i: n for i, n in enumerate(pitchnames)}
 
     X_val = np.load(args.xval)
-    seed = X_val[random.randint(0,len(X_val)-1)]
+    seed = X_val[random.randint(0, len(X_val) - 1)]
 
-    model = load_model(args.model,
-        custom_objects={"PositionalEmbedding":PositionalEmbedding,
-                        "TransformerBlock":TransformerBlock},
-        compile=False)
+    model = load_model(
+        args.model,
+        custom_objects={
+            "PositionalEmbedding": PositionalEmbedding,
+            "TransformerBlock": TransformerBlock
+        },
+        compile=False
+    )
+
+    print("✅ Model loaded successfully!")
 
     tokens = generate_tokens(model, seed)
 
@@ -270,14 +276,14 @@ def main():
 
     n = max(len(piano_audio), len(drums_audio))
     mix = np.zeros(n)
-    mix[:len(piano_audio)] += piano_audio*1.05
+    mix[:len(piano_audio)] += piano_audio * 1.05
     mix[:len(drums_audio)] += drums_audio
 
-    mix = mix/np.max(np.abs(mix))*0.95
+    mix = mix / np.max(np.abs(mix)) * 0.95
     sf.write("static/final.wav", mix, 44100)
 
     print("🔥 Beat Ready → static/final.wav")
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
