@@ -238,7 +238,7 @@ def main():
     parser.add_argument("--duration", type=int, default=60)
     parser.add_argument("--instrument", default="Electric Piano 1")
     parser.add_argument("--kit", default="drum_kits/trapkit")
-    parser.add_argument("--model", default="models/tuneformer_piano.h5")
+    parser.add_argument("--model", default="models/tuneformer_piano.keras")
     parser.add_argument("--vocab", default="data/vocab.pkl")
     parser.add_argument("--xval", default="data/X_val.npy")
 
