@@ -1,6 +1,7 @@
-flask
-numpy
-soundfile
-pretty_midi
-tensorflow
-scipy
+flask==3.0.3
+gunicorn==21.2.0
+numpy==1.23.5
+scipy==1.10.1
+soundfile==0.12.1
+pretty_midi==0.2.10
+tensorflow-cpu==2.13.0
