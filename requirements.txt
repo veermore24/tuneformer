@@ -1,0 +1,6 @@
+flask
+numpy
+soundfile
+pretty_midi
+tensorflow
+scipy

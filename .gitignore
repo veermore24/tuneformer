@@ -1,0 +1,23 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+tuneformer_env/
+venv/
+env/
+
+# Large datasets and training files
+dataset/
+data/X_train.npy
+data/X_test.npy
+data_chords/
+
+# Output files
+outputs/
+static/final.wav
+
+# macOS system files
+.DS_Store

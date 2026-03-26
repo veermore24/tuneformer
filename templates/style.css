@@ -1,0 +1,237 @@
+/* ---------- GLOBAL ---------- */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at 20% 20%, #0b1224, #020617);
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* ---------- NAVBAR ---------- */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(10, 15, 35, 0.8);
+  backdrop-filter: blur(12px);
+  padding: 12px 60px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #2AF598, #009EFD);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+}
+
+.nav-center a {
+  color: #d4d4d4;
+  text-decoration: none;
+  margin: 0 18px;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-center a:hover {
+  color: #2AF598;
+}
+
+.login-btn {
+  background: linear-gradient(90deg, #009EFD, #2AF598);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+}
+
+.login-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* ---------- MAIN LANDSCAPE LAYOUT ---------- */
+.main-landscape {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+  padding: 80px 60px;
+  min-height: 80vh;
+}
+
+.left-content {
+  width: 45%;
+}
+
+.left-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #2AF598, #009EFD);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.left-content p {
+  color: #b0b0b0;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* ---------- FORM CARD ---------- */
+.form-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 40px;
+  border-radius: 20px;
+  width: 380px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+}
+
+.form-card h3 {
+  color: #2AF598;
+}
+
+.form-group {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  color: #bbb;
+  margin-bottom: 6px;
+}
+
+input, select, textarea {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+textarea {
+  height: 80px;
+  resize: none;
+}
+
+.generate-btn {
+  width: 100%;
+  margin-top: 25px;
+  background: linear-gradient(90deg, #009EFD, #2AF598);
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.generate-btn:hover {
+  transform: scale(1.05);
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  text-align: center;
+  padding: 30px 0;
+  font-size: 0.85rem;
+  color: #999;
+  margin-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .main-landscape {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .left-content {
+    width: 90%;
+    text-align: center;
+  }
+
+  .form-card {
+    width: 90%;
+  }
+}
+/* Smooth show/hide animation for lyrics */
+#lyricsGroup {
+  display: none;
+  transition: all 0.3s ease-in-out;
+}
+/* ---------- FUTURISTIC RADIO BUTTONS ---------- */
+.music-type {
+  display: flex;
+  gap: 15px;
+  margin: 15px 0;
+  justify-content: space-around;
+}
+
+.music-type input[type="radio"] {
+  display: none;
+}
+
+.futuristic-btn {
+  padding: 10px 20px;
+  border: 2px solid #0ff;
+  border-radius: 30px;
+  color: #0ff;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px #0ff;
+  transition: all 0.3s ease;
+}
+
+.music-type input[type="radio"]:checked + .futuristic-btn {
+  background: linear-gradient(90deg, #00ffff, #0066ff);
+  color: #000;
+  box-shadow: 0 0 25px #00ffff;
+  transform: scale(1.05);
+}
+
+/* Smooth transition for lyrics section */
+#lyricsGroup {
+  display: none;
+  transition: all 0.3s ease-in-out;
+}
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at 20% 20%, #0a0f1e, #05080f 60%, #020409),
+              radial-gradient(circle at 80% 80%, rgba(0, 150, 255, 0.15), transparent 60%),
+              radial-gradient(circle at 30% 80%, rgba(0, 255, 200, 0.1), transparent 70%);
+  background-blend-mode: overlay;
+  color: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+  animation: bgMotion 15s ease-in-out infinite alternate;
+}
+
+/* Smooth moving gradient animation */
+@keyframes bgMotion {
+  0% {
+    background-position: 20% 30%, 80% 70%, 30% 80%;
+  }
+  50% {
+    background-position: 25% 35%, 75% 65%, 35% 75%;
+  }
+  100% {
+    background-position: 20% 30%, 80% 70%, 30% 80%;
+  }
+}
+ ,jn    

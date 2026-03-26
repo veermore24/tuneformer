@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TuneFormer – AI Music Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+    .card {
+      background: rgba(255,255,255,0.1);
+      padding: 25px;
+      border-radius: 15px;
+      width: 350px;
+      margin: auto;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+    button {
+      background: #ff4b2b;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #ff416c;
+    }
+    audio {
+      margin-top: 20px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎵 TuneFormer AI Music Generator</h1>
+
+  <div class="card">
+    <label>BPM</label>
+    <input type="number" id="bpm" value="120">
+
+    <label>Style</label>
+    <select id="style">
+      <option value="lofi">Lofi</option>
+      <option value="happy">Happy</option>
+      <option value="romantic">Romantic</option>
+      <option value="energetic">Energetic</option>
+      <option value="aggressive">Aggressive</option>
+    </select>
+
+    <label>Duration (seconds)</label>
+    <input type="number" id="duration" value="60">
+
+    <button onclick="generateMusic()">Generate Music</button>
+
+    <audio id="player" controls style="display:none;"></audio>
+  </div>
+
+  <script>
+    function generateMusic() {
+      const bpm = document.getElementById("bpm").value;
+      const style = document.getElementById("style").value;
+      const duration = document.getElementById("duration").value;
+
+      fetch("/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ bpm, style, duration })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const player = document.getElementById("player");
+          player.src = data.file + "?t=" + new Date().getTime();
+          player.style.display = "block";
+          player.play();
+        } else {
+          alert("Error generating music!");
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
