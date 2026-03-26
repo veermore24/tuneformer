@@ -4,6 +4,8 @@ numpy==1.23.5
 scipy==1.10.1
 soundfile==0.12.1
 pretty_midi==0.2.10
-tensorflow-cpu==2.13.0
+tensorflow-cpu==2.10.0
+keras==2.10.0
+h5py==3.8.0
 setuptools==68.2.2
 wheel==0.41.2
