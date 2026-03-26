@@ -5,3 +5,5 @@ scipy==1.10.1
 soundfile==0.12.1
 pretty_midi==0.2.10
 tensorflow-cpu==2.13.0
+setuptools==68.2.2
+wheel==0.41.2
